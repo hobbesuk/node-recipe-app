@@ -150,6 +150,25 @@ main {
 	color: #2c3e50;
 }
 
+.feature-link {
+	text-decoration: none;
+	color: inherit;
+	transition: transform 0.2s;
+	display: block;
+}
+
+.feature-link:hover {
+	transform: translateY(-2px);
+}
+
+.feature-link .feature {
+	cursor: pointer;
+}
+
+.feature-link:hover .feature {
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
 /* Recipes page styles */
 .recipes-container {
 	padding: 1rem 0;
