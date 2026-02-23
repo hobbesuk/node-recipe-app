@@ -40,4 +40,14 @@ router.post('/recipes/:id/edit', async (req, res) => {
 	res.redirect(`/recipes/${recipeId}`)
 })
 
+router.delete('/recipes/:id', async (req, res) => {
+	const db = await getDbConnection()
+	const recipeId = req.params.id
+	const result = await db.run('DELETE FROM recipes WHERE id = ?', [recipeId])
+	if (result.changes === 0) {
+		return res.status(404).json({ error: 'Recipe not found' })
+	}
+	res.status(200).json({ message: 'Recipe deleted successfully' })
+})
+
 module.exports = router
