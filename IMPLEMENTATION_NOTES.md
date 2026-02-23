@@ -88,7 +88,7 @@ test('POST /recipes should create a new recipe', async () => {
 
 ## Conclusion
 
-The issue description states "this app has the stub of functionality to create new recipies" but the investigation reveals this is not a stub - it's a complete, production-ready implementation.
+The issue description states "this app has the stub of functionality to create new recipes" but the investigation reveals this is not a stub - it's a complete, production-ready implementation.
 
 The feature includes:
 - ✅ Working backend endpoint with database integration
