@@ -64,4 +64,63 @@ describe('Routes', () => {
     expect(recipe).toBeDefined();
     expect(recipe.title).toBe(newRecipe.title);
   });
+
+  test('DELETE /recipes/:id should delete a recipe', async () => {
+    // Create a recipe first
+    const newRecipe = {
+      title: 'Recipe To Delete',
+      ingredients: 'Test ingredients',
+      method: 'Test method'
+    };
+
+    await request(app)
+      .post('/recipes')
+      .send(newRecipe);
+
+    // Get the recipe ID
+    const recipe = await db.get('SELECT * FROM recipes WHERE title = ?', [newRecipe.title]);
+    expect(recipe).toBeDefined();
+
+    // Delete the recipe
+    const deleteResponse = await request(app)
+      .delete(`/recipes/${recipe.id}`);
+
+    expect(deleteResponse.status).toBe(200);
+    expect(deleteResponse.body.message).toBe('Recipe deleted successfully');
+
+    // Verify recipe is deleted
+    const deletedRecipe = await db.get('SELECT * FROM recipes WHERE id = ?', [recipe.id]);
+    expect(deletedRecipe).toBeUndefined();
+  });
+
+  test('GET /recipes/:id should return 404 for a deleted recipe', async () => {
+    // Create a recipe first
+    const newRecipe = {
+      title: 'Recipe To Delete And Check',
+      ingredients: 'Test ingredients',
+      method: 'Test method'
+    };
+
+    await request(app)
+      .post('/recipes')
+      .send(newRecipe);
+
+    // Get the recipe ID
+    const recipe = await db.get('SELECT * FROM recipes WHERE title = ?', [newRecipe.title]);
+    expect(recipe).toBeDefined();
+
+    // Delete the recipe
+    await request(app).delete(`/recipes/${recipe.id}`);
+
+    // Try to GET the deleted recipe - should show recipe not found
+    const getResponse = await request(app).get(`/recipes/${recipe.id}`);
+    expect(getResponse.status).toBe(200);
+    expect(getResponse.body.locals.recipe).toBeUndefined();
+  });
+
+  test('DELETE /recipes/:id should return 404 for non-existent recipe', async () => {
+    const response = await request(app).delete('/recipes/99999');
+    expect(response.status).toBe(404);
+    expect(response.body.error).toBe('Recipe not found');
+  });
 });
