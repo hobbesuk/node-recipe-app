@@ -100,16 +100,20 @@ function confirmDelete(recipeId) {
                 'Content-Type': 'application/json'
             }
         })
-        .then(response => response.json())
-        .then(data => {
-            if (data.message) {
-                window.location.href = '/recipes';
-            } else if (data.error) {
-                alert('Error: ' + data.error);
+        .then(response => {
+            if (!response.ok) {
+                return response.json().then(data => {
+                    throw new Error(data.error || 'Failed to delete recipe');
+                });
             }
+            return response.json();
+        })
+        .then(data => {
+            window.location.href = '/recipes';
         })
         .catch(error => {
-            alert('Failed to delete recipe: ' + error.message);
+            alert('Failed to delete recipe. Please try again.');
+            console.error('Delete error:', error);
         });
     }
 }
