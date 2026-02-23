@@ -389,3 +389,22 @@ footer {
 		padding: 0 1rem;
 	}
 }
+
+/* Reduced motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+	.feature-link {
+		transition: none;
+	}
+
+	.feature-link:hover {
+		transform: none;
+	}
+
+	.recipe-card {
+		transition: none;
+	}
+
+	.recipe-card:hover {
+		transform: none;
+	}
+}
